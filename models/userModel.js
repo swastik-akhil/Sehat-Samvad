@@ -1,10 +1,8 @@
 const mongoosoe = require('mongoose');
 const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken");
-import('nanoid').then(({ nanoid }) => {
-        const uniqueID = nanoid();
-        console.log(uniqueID);
-    }).catch(err => {
+const validator = require("validator");
+import('nanoid').then(({ nanoid }) => {}).catch(err => {
         console.error('Error loading nanoid:', err);
     });
 const userSchema = new mongoosoe.Schema({
@@ -35,7 +33,7 @@ const userSchema = new mongoosoe.Schema({
         required : [true, "Please enter your password"],
         min : [6, "Password must be at least 6 characters long"],
         max : [20, "Password must be at most 20 characters long"],
-        select : false
+        // select : false
     },
     role : {
         type : String,
@@ -55,6 +53,32 @@ const userSchema = new mongoosoe.Schema({
     // },
 },{timeStamps : true});
 
+userSchema.pre("save", async function(next){
+    if(!this.isModified("password")){
+        next();
+    }
+    this.password = await bcrypt.hash(this.password, 10);
+    next();
+})
+
+userSchema.methods.checkPassword = async function(userSendPassword){
+    return await bcrypt.compare(userSendPassword, this.password)
+    
+}
+
+userSchema.methods.generateToken = async function(){
+    return jwt.sign({id : this._id}, process.env.JWT_SECRET,{
+        expiresIn : process.env.JWT_EXPIRY_TIME
+    })
+}
+
+userSchema.methods.generateForgotPasswordToken = async function(){
+    const resetToken = crypto.randomBytes(20).toString("hex");
+    //make sure to hash to taoken sent by the user and then comapre it with the hashed token in the database
+    this.forgotPasswordToken = crypto.createHash("sha256").update(resetToken).digest("hex");
+    this.forgotPasswordExpire = process.env.FORGOT_PASSWORD_EXPIRE_TIME;
+    return resetToken;
+}
 
 
 

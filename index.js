@@ -12,8 +12,13 @@ app.use(cookieParser());
 
 
 
+//import routes
+const userRouter = require("./router/userRouter");
 
 
+
+//routes
+app.use("/api/v1/user", userRouter);
 
 
 
