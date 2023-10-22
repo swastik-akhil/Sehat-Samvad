@@ -31,9 +31,9 @@ const userSchema = new mongoosoe.Schema({
     password : {
         type : String,
         required : [true, "Please enter your password"],
-        min : [6, "Password must be at least 6 characters long"],
-        max : [20, "Password must be at most 20 characters long"],
-        // select : false
+        minlength : [6, "Password must be at least 6 characters long"],
+        maxlength : [20, "Password must be at most 20 characters long"],
+        select : false
     },
     role : {
         type : String,
@@ -67,9 +67,9 @@ userSchema.methods.checkPassword = async function(userSendPassword){
 }
 
 userSchema.methods.generateToken = async function(){
-    return jwt.sign({id : this._id}, process.env.JWT_SECRET,{
+    return await jwt.sign({id : this._id}, process.env.JWT_SECRET,{
         expiresIn : process.env.JWT_EXPIRY_TIME
-    })
+    });
 }
 
 userSchema.methods.generateForgotPasswordToken = async function(){
@@ -79,17 +79,6 @@ userSchema.methods.generateForgotPasswordToken = async function(){
     this.forgotPasswordExpire = process.env.FORGOT_PASSWORD_EXPIRE_TIME;
     return resetToken;
 }
-
-
-
-
-
-
-
-
-
-
-
 
 
 module.exports = mongoosoe.model('User', userSchema);
