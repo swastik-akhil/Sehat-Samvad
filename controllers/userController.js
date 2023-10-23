@@ -1,5 +1,6 @@
 const User = require('../models/userModel');
 const cookieToken = require('../utils/cookieToken');
+const emailHelper = require('../utils/emailHelper');
 require("dotenv").config();
 async function signup (req,res){
     try{
@@ -67,7 +68,46 @@ async function logout(req,res){
     res.status(200).json({succeess : true, message : "logout success"});
 }
 
+async function forgotPassword(req,res){
+    const {email} = req.body;
+    if(!email){
+        return res.status(400).json({status : "failed", message : "Email is required"});
+    }
+
+    const user = await User.findOne({email});
+    if(!user){
+        return res.status(400).json({status : "failed", message : "No user found with this email"});
+    }
+
+    const forgotToken = await user.generateForgotPasswordToken();
+    await user.save({validateBeforeSave : false});
+
+    const myUrl = `${req.protocol}://${req.get("host")}/api/v1/user/resetPassword/${forgotToken}`;
+    const message = `Copy and paste this link in your browser to reset your password\n ${myUrl}`;
+    const options = {
+        email : user.email,
+        subject : "Reset Password",
+        message
+    }
+
+    try{
+        await emailHelper(options)
+        return res.status(200).json({status : "success", message : "Email sent successfully"});
+    }catch(e){
+        console.log(e);
+        user.forgotPasswordToken = undefined;
+        user.forgotPasswordExpire = undefined;
+        await user.save({validateBeforeSave : false});
+        return res.status(400).json({status : "failed", message : "Something went wrong while sending email"});
+    }
 
 
 
-module.exports = {signup, login, logout}
+
+
+}
+
+
+
+
+module.exports = {signup, login, logout, forgotPassword}
