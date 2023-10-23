@@ -57,12 +57,17 @@ async function login(req,res){
     catch(err){
         console.log(err);
     }
+}
 
-
-
+async function logout(req,res){
+    res.cookie("token", null, {
+        expires : new Date(Date.now()),
+        httpOnly : true
+    })
+    res.status(200).json({succeess : true, message : "logout success"});
 }
 
 
 
 
-module.exports = {signup, login}
+module.exports = {signup, login, logout}
