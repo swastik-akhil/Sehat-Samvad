@@ -39,8 +39,8 @@ const userSchema = new mongoosoe.Schema(
         },
         role: {
             type: String,
-            enum: ["user", "doctor", "admin"],
-            default: "user",
+            enum: ["patient", "doctor", "admin"],
+            default: "patient",
         },
         forgotPasswordToken: {
             type: String,
@@ -49,21 +49,37 @@ const userSchema = new mongoosoe.Schema(
             type: Date,
             default: Date.now()   //15 minutes
         },
-        createdAt: {
-            type: Date,
-            default: Date.now(),
+        specialisation : {
+            type : String,
+            enum: ['Cardiology', 'Orthopedics', 'General Surgery', 'Neurology', 'Urology', 'ENT (Ear, Nose, Throat)', 'Psychiatry', 'Dentistry', 'Other'],
         },
+        // createdAt: {
+        //     type: Date,
+        //     default: Date.now(),
+        // },
     },
     { timeStamps: true }
 );
 
 userSchema.pre("save", async function (next) {
     if (!this.isModified("password")) {
-        next();
+        return next();
     }
+
     this.password = await bcrypt.hash(this.password, 10);
+
     next();
 });
+
+userSchema.pre("save", async function (next) {
+    if (!this.isInit("role")) {
+        return next();
+    }
+    if(this.role !== "doctor"){
+        this.specialisation = undefined;
+    }
+    next();
+})
 
 userSchema.methods.checkPassword = async function (userSendPassword) {
     return await bcrypt.compare(userSendPassword, this.password);
