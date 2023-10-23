@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const {signup, login, logout, forgotPassword} = require("../controllers/userController");
+const {signup, login, logout, sendResetPasswordEmail,resetPassword} = require("../controllers/userController");
 
 router.route("/signup")
     .post(signup);
@@ -11,8 +11,11 @@ router.route("/login")
 router.route("/logout")
     .get(logout)
 
-router.route("/forgotPassword")
-    .post(forgotPassword)
+router.route("/password/reset")
+    .post(sendResetPasswordEmail)
+
+router.route("/password/reset/:token")
+    .post(resetPassword)
 
 
 

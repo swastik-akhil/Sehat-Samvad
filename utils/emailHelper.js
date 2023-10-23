@@ -34,39 +34,14 @@ const mailHelper = async function(options){
       }
     })
 
-    //   const mailId = process.env.EMAIL_ID
+      const mailId = process.env.EMAIL_ID
     const message = {
-        // from: `"Akhil Agrawal" ${mailId}`, // sender address
-        from: '"Akhil Agrawal" <akhil.mindset@gmail.com>', // sender address
+        from: `"Akhil Agrawal" <${mailId}>`,
         to: options.email,  
         subject: options.subject, 
         text: options.message,
-        // html: "<a></a>   ", 
-        }
+    }
     await transporter.sendMail(message);
 }
-
-// try{
-//   const accessToken = await oAuth2Client.getAccessToken();
-//   const transport = nodemailer.createTransport({
-//     service : "gmail",
-//     auth : {
-//       type : "OAUTH2",
-//       user : process.env.EMAIL_ID,
-//       clientId : process.env.CLIENT_ID,
-//       clientSecret : process.env.CLIENT_SECRET,
-//       refreshToken : process.env.REFRESH_TOKEN,
-//       accessToken : accessToken 
-//     }
-  
-  
-//   })
-// }catch(err){
-//     console.log(err);
-// }
-
-
-
-
 
 module.exports = mailHelper

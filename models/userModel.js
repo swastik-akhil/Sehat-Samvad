@@ -47,7 +47,7 @@ const userSchema = new mongoosoe.Schema(
         },
         forgotPasswordExpire: {
             type: Date,
-            default: Date.now,
+            default: Date.now()   //15 minutes
         },
         createdAt: {
             type: Date,
@@ -77,12 +77,13 @@ userSchema.methods.generateToken = async function () {
 
 userSchema.methods.generateForgotPasswordToken = async function () {
     const resetToken = crypto.randomBytes(20).toString("hex");
-    //make sure to hash to taoken sent by the user and then comapre it with the hashed token in the database
+    //make sure to hash to token sent by the user and then comapre it with the hashed token in the database
     this.forgotPasswordToken = crypto
         .createHash("sha256")
         .update(resetToken)
         .digest("hex");
-    this.forgotPasswordExpire = process.env.FORGOT_PASSWORD_EXPIRE_TIME;
+
+    this.forgotPasswordExpire = Date.now()+15*60*1000;
     return resetToken;
 };
 

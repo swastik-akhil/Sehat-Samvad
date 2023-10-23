@@ -2,6 +2,7 @@ const User = require('../models/userModel');
 const cookieToken = require('../utils/cookieToken');
 const emailHelper = require('../utils/emailHelper');
 require("dotenv").config();
+const crypto = require("crypto");
 async function signup (req,res){
     try{
         const {firstName, lastName, email, password } = req.body;
@@ -68,7 +69,7 @@ async function logout(req,res){
     res.status(200).json({succeess : true, message : "logout success"});
 }
 
-async function forgotPassword(req,res){
+async function sendResetPasswordEmail(req,res){
     const {email} = req.body;
     if(!email){
         return res.status(400).json({status : "failed", message : "Email is required"});
@@ -82,8 +83,8 @@ async function forgotPassword(req,res){
     const forgotToken = await user.generateForgotPasswordToken();
     await user.save({validateBeforeSave : false});
 
-    const myUrl = `${req.protocol}://${req.get("host")}/api/v1/user/resetPassword/${forgotToken}`;
-    const message = `Copy and paste this link in your browser to reset your password\n ${myUrl}`;
+    const myUrl = `${req.protocol}://${req.get("host")}/api/v1/user/password/reset/${forgotToken}`;
+    const message = `We received a request to reset your password. Click the link below to reset it:\n ${myUrl}`;
     const options = {
         email : user.email,
         subject : "Reset Password",
@@ -101,13 +102,35 @@ async function forgotPassword(req,res){
         return res.status(400).json({status : "failed", message : "Something went wrong while sending email"});
     }
 
+}
 
+async function resetPassword(req,res){
+    const token = req.params.token;
+    encyrptedToken = crypto
+        .createHash("sha256")
+        .update(token)
+        .digest("hex");
+        
+    const user = await User.findOne({forgotPasswordToken : encyrptedToken, forgotPasswordExpire : {$gt : Date.now()}})
+    if(!user){
+        return res.status(400).json({status : "failed", message : "Invalid token or token expired"});
+    }
 
+    if(req.body.password !== req.body.confirmPassword){
+        return res.status(400).json({status : "failed", message : "Password and confirm password does not match"});
+    }
 
+    const {password} = req.body;
+    user.password = password;
+    user.forgetPasswordToken = undefined;
+    user.forgetPasswordExpire = undefined;
+    await user.save();
+    
+    cookieToken(user,res);
 
+    return res.status(400).json({status : "success", message : "Password reset successfully, you can go ahead"});
+    
 }
 
 
-
-
-module.exports = {signup, login, logout, forgotPassword}
+module.exports = {signup, login, logout, sendResetPasswordEmail, resetPassword}
