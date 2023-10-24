@@ -53,10 +53,30 @@ async function createAppointment(req,res){
 }
 
 async function showAppointments(req,res){
-    const user = req.user;
-    const appointments = await Appointment.find({patientId : user._id});
-    return res.status(200).json({status : "success", appointments});
+    try{
+        const user = req.user;
+        const appointments = await Appointment.find({patientId: user._id});
+        return res.status(200).json({status: "success", appointments});
+    }catch (e) {
+        console.log(e)
+    }
+}
+
+async function getDoctor(req,res){
+    try{
+        const {specialisation} = req.query;
+        if ( !specialisation) {
+            return res.status(400).json({status: "error", message: "doctorId is required"});
+        }
+        const doctors = await User.find({specialisation});
+        if ( !doctors) {
+            return res.status(400).json({status: "error", message: "doctors not found"});
+        }
+        return res.status(200).json({status: "success", doctors});
+    }catch (e) {
+        console.log(e)
+    }
 }
 
 
-module.exports = {createAppointment, showAppointments}
+module.exports = {createAppointment, showAppointments,getDoctor}

@@ -48,10 +48,12 @@ const userSchema = new mongoose.Schema(
             default: Date.now()   //15 minutes
         },
         // TODO: DOCTOR ONLY FIELDS
-        specialisation : {
+        specialisation : [
+            {
             type : String,
             enum: ['Cardiology', 'Orthopedics', 'General Surgery', 'Neurology', 'Urology', 'ENT (Ear, Nose, Throat)', 'Psychiatry', 'Dentistry', 'Other'],
-        },
+            }
+        ],
         appointments : [
             {
                 type : mongoose.Schema.Types.ObjectId,
