@@ -5,7 +5,7 @@ require("dotenv").config();
 const crypto = require("crypto");
 async function signup (req,res){
     try{
-        const {firstName, lastName, email, password } = req.body;
+        const {firstName, lastName, email, password} = req.body;
         if(!firstName || !lastName || !email || !password){
             return res.status(400).json({status : "failed", message : "All fields are required"});
         }
@@ -15,7 +15,7 @@ async function signup (req,res){
         }
 
         cookieToken(user,res);
-        return res.status(200).json({status : "success", message : "Account created successfully"});
+        return res.status(200).json({status : "success", message : "Account created successfully", user});
     }catch(err){
         console.log(err);
     }
@@ -30,15 +30,15 @@ async function login(req,res){
         }
 
         const user = await User.findOne({email}).select("+password")
-
+        console.log(user)
         if(!user){
             return res.status(400).json({status : "failed", message : "Invalid credentials"});
         }
 
         const flag = await user.checkPassword(password);
-        
+        console.log(`flag: ${flag}`)
         if(!flag){
-            return res.status(400).json({status : "failed", message : "Invalid credentials"});
+            return res.status(400).json({status : "failed", message : "Email or password does not match"});
         }
         
         // const cookieToken =  (user,res)=>{
@@ -52,7 +52,9 @@ async function login(req,res){
 
         // }
 
-        cookieToken(user,res);
+        await cookieToken(user,res);
+        // console.log(`cookie token generated is ${cookieToken}`)
+        console.log(res.cookie)
         
         return res.status(200).json({status : "success", message : "Logged in successfully"});
     }
@@ -132,5 +134,32 @@ async function resetPassword(req,res){
     
 }
 
+async function updatePassword(req,res){
+    const userId = req.user.id
+    const user = await User.findById(userId).select("+password")
+    const {password, newPassword, confirmPassword} = req.body;
+    
+    if(!password || !newPassword || !confirmPassword){
+        return res.status(400).json({status : "failed", message : "All fields are required"});
+    }
+    
+    if(newPassword !== confirmPassword){
+        return res.status(400).json({status : "failed", message : "New password and confirm password does not match"});
+    }
+    
+    if(password === newPassword){
+        return res.status(400).json({status : "failed", message : "New password and old password cannot be same"});
+    }
+    
+    const flag = await user.checkPassword(password);
+    if(!flag){
+        return res.status(400).json({status : "failed", message : "Incorrect Password"});
+    }
 
-module.exports = {signup, login, logout, sendResetPasswordEmail, resetPassword}
+    user.password = newPassword;
+    await user.save();
+    return res.status(200).json({status : "success", message : "Password updated successfully"});
+}
+
+
+module.exports = {signup, login, logout, sendResetPasswordEmail, resetPassword, updatePassword}

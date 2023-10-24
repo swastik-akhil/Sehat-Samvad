@@ -14,11 +14,15 @@ app.use(cookieParser());
 
 //import routes
 const userRouter = require("./router/userRouter");
-
-  
+const patientRouter = require("./router/patientRouter");
+const adminRouter = require("./router/adminRouter");
+const doctorRouter = require("./router/doctorRouter");
 
 //routes
 app.use("/api/v1/user", userRouter);
+app.use("/api/v1/patient", patientRouter);
+app.use("/api/v1/admin", adminRouter);
+app.use("/api/v1/doctor", doctorRouter);
 
 
 

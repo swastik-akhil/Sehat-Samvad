@@ -1,31 +1,29 @@
-const mongoosoe = require("mongoose");
+const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const validator = require("validator");
+// const validator = require("validator");
 const crypto = require("crypto");
-// import('nanoid').then(({ nanoid }) => {}).catch(err => {
-//         console.error('Error loading nanoid:', err);
-//     });
-const userSchema = new mongoosoe.Schema(
+
+const userSchema = new mongoose.Schema(
     {
         firstName: {
             type: String,
             required: [true, "Please enter your first name"],
             trim: true,
-            min: 3,
-            max: 20,
+            // min: 3,
+            // max: 20,
         },
         lastName: {
             type: String,
             required: false,
             trim: true,
-            min: 3,
-            max: 20,
+            // min: 3,
+            // max: 20,
         },
         email: {
             type: String,
             required: [true, "Please enter your email"],
-            validate: [validator.isEmail, "Please enter a valid email"],
+            // validate: [validator.isEmail, "Please enter a valid email"],
             trim: true,
             unique: true,
             lowercase: true,
@@ -33,8 +31,8 @@ const userSchema = new mongoosoe.Schema(
         password: {
             type: String,
             required: [true, "Please enter your password"],
-            minlength: [6, "Password must be at least 6 characters long"],
-            maxlength: [20, "Password must be at most 20 characters long"],
+            // minlength: [6, "Password must be at least 6 characters long"],
+            // maxlength: [20, "Password must be at most 20 characters long"],
             select: false,
         },
         role: {
@@ -49,14 +47,21 @@ const userSchema = new mongoosoe.Schema(
             type: Date,
             default: Date.now()   //15 minutes
         },
+        // TODO: DOCTOR ONLY FIELDS
         specialisation : {
             type : String,
             enum: ['Cardiology', 'Orthopedics', 'General Surgery', 'Neurology', 'Urology', 'ENT (Ear, Nose, Throat)', 'Psychiatry', 'Dentistry', 'Other'],
         },
-        // createdAt: {
-        //     type: Date,
-        //     default: Date.now(),
-        // },
+        appointments : [
+            {
+                type : mongoose.Schema.Types.ObjectId,
+                ref : "Appointment"
+            }
+        ],
+        createdAt: {
+            type: Date,
+            default: Date.now(),
+        },
     },
     { timeStamps: true }
 );
@@ -82,7 +87,10 @@ userSchema.pre("save", async function (next) {
 })
 
 userSchema.methods.checkPassword = async function (userSendPassword) {
-    return await bcrypt.compare(userSendPassword, this.password);
+    //console.log(`this.password== ${this.password}`)         //TODO:
+    //console.log(`userSendPassword ${userSendPassword}`)     //TODO:
+    const flag =  await bcrypt.compare(userSendPassword, this.password);
+    return flag
 };
 
 userSchema.methods.generateToken = async function () {
@@ -93,7 +101,7 @@ userSchema.methods.generateToken = async function () {
 
 userSchema.methods.generateForgotPasswordToken = async function () {
     const resetToken = crypto.randomBytes(20).toString("hex");
-    //make sure to hash to token sent by the user and then comapre it with the hashed token in the database
+    //make sure to hash to token sent by the user and then compare it with the hashed token in the database
     this.forgotPasswordToken = crypto
         .createHash("sha256")
         .update(resetToken)
@@ -103,4 +111,4 @@ userSchema.methods.generateForgotPasswordToken = async function () {
     return resetToken;
 };
 
-module.exports = mongoosoe.model("User", userSchema);
+module.exports = mongoose.model("User", userSchema);
