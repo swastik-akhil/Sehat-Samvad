@@ -16,6 +16,7 @@ function isAdmin(req, res, next){
 
 
 function isDoctor(req, res, next){
+    console.log(req.user);
     if(req.user.role!=="doctor"){
         return res?.status(400)?.json({message : "not a doctor"})
     }

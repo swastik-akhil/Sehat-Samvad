@@ -18,7 +18,7 @@ router.route("/password/reset")
 router.route("/password/reset/:token")
     .post(resetPassword)
 
-    router.route("/password/updatePassword")
+router.route("/password/updatePassword")
     .post(isLoggedIn, updatePassword)
 
 

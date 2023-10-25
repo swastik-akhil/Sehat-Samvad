@@ -38,5 +38,35 @@ async function updateAdminRole(req,res){
     }
 }
 
+async function adminDeleteDoctor(req,res){
+    const {doctorId} = req.query;
+    if(!doctorId){
+        return res.status(400).json({status : "failed", message : "doctorId is required"});
+    }
+    const doctor = await User.findById(doctorId);
+    if(!doctor){
+        return res.status(400).json({status : "failed", message : "doctor not found"});
+    }
+    if(doctor.role !== "doctor"){
+        return res.status(400).json({status : "failed", message : "user is not a doctor"});
+    }
+    await User.findByIdAndDelete(doctorId);
+    return res.status(200).json({status : "success", message : "doctor deleted successfully"});
+}
 
-module.exports = {updateAdminRole, adminGetAllUsers}
+async function adminSortUsers(req,res){
+    try{
+        const {role} = req.query;
+        const users = await User.find({role});
+        return res.status(200).json({"message" : "success",users})
+
+    }catch (e) {
+        console.log(e)
+    }
+}
+
+
+
+
+
+module.exports = {updateAdminRole, adminGetAllUsers, adminDeleteDoctor, adminSortUsers}

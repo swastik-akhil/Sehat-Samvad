@@ -1,4 +1,5 @@
 const User = require("../models/userModel");
+const Appointment = require("../models/appointmentModel");
 const {isLoggedin} = require('../middlewares/userMiddleware');
 require("dotenv").config();
 async function  updateDoctorRole(req,res){
@@ -47,6 +48,18 @@ async function doctorAddSpecialisation(req,res){
 
 }
 
+async function doctorMarkAppointmentComplete(req,res){
+	const {appointmentId} = req.query;
+	if(!appointmentId){
+		return res.status(400).json({status : "failed", message : "appointmentId is required"});
+	}
+	const appointment = await Appointment.findById(appointmentId);
+	if(!appointment){
+		return res.status(400).json({status : "failed", message : "appointment not found"});
+	}
+	appointment.status = "completed";
+	await appointment.save();
+	return res.status(200).json({status : "success", message : "Appointment marked as completed successfully", appointment});
+}
 
-
-module.exports = {updateDoctorRole, doctorAddSpecialisation}
+module.exports = {updateDoctorRole, doctorAddSpecialisation, doctorMarkAppointmentComplete}

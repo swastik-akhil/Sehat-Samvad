@@ -9,12 +9,20 @@ async function signup (req,res){
         if(!firstName || !lastName || !email || !password){
             return res.status(400).json({status : "failed", message : "All fields are required"});
         }
+        if(password.length <6){
+            return res.status(400).json({status : "failed", message : "Password must be atleast 6 characters long"});
+        }
+
+        const existingUser = await User.findOne({email});
+        if(existingUser){
+            return res.status(400).json({status : "failed", message : "user already exists"})
+        }
         const user = await User.create({firstName, lastName, email, password});
         if(!user){
             return res.status(400).json({status : "failed", message : "Something went wrong while creating your account"});
         }
 
-        cookieToken(user,res);
+        await cookieToken(user,res);
         return res.status(200).json({status : "success", message : "Account created successfully", user});
     }catch(err){
         console.log(err);
