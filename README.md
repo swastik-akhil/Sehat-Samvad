@@ -27,7 +27,7 @@ To run this project locally, follow these steps
 1. Clone the project (dev branch):
 
     ```bash
-    git clone -b dev https://github.com/swastik-akhil/Appointment-Scheduler.git
+    git clone -b dev https://github.com/swastik-akhil/Sehat-Samvad.git
     ```
 
 2. Install dependencies:
