@@ -11,7 +11,7 @@ It's a secure, user-friendly solution for hassle-free appointment scheduling, ta
 
 
 
-## Authors
+## Author
 
 [@swastik-akhil](https://github.com/swastik-akhil)
 
