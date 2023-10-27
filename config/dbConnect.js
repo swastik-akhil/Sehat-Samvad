@@ -10,8 +10,8 @@ exports.dbConnect = async ()=>{
 		.catch((err)=>{
 			console.log(`DB CONNECTION : "FAILED"`);
 			console.log(err);
-			process.on('beforeExit', ()=>{console.log(`process is exiting`)})
-			process.exit(1);
+			// process.on('beforeExit', ()=>{console.log(`process is exiting`)})
+			// process.exit(1);
 
 		})
 }

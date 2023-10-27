@@ -1,5 +1,5 @@
 require("dotenv").config();
-const cookieToken = async (user,res,next)=>{
+const cookieToken = async (user,res, next)=>{
     try{
         const token = await user.generateToken();
         // console.log(token)
@@ -12,7 +12,6 @@ const cookieToken = async (user,res,next)=>{
         user.password = undefined;
         return res.cookie("token", token, options);
 
-        // next()
     }catch(e){
         console.log(e);
     }

@@ -1,6 +1,5 @@
 const User = require('../models/userModel');
 const Appointment = require('../models/appointmentModel');
-const {isLoggedin} = require('../middlewares/userMiddleware');
 const emailHelper = require("../utils/emailHelper")
 async function createAppointment(req,res){
 
@@ -9,7 +8,7 @@ async function createAppointment(req,res){
         return res.status(400).json({status : "error", message : "doctorId is required"});
     }
 
-    const patientId = req.user._id;
+    // const patientId = req.user._id;
     const {date, description, amount} = req.body;
 
     if(!date || !description || !amount){

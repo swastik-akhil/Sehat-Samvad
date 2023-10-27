@@ -6,6 +6,24 @@ const crypto = require("crypto");
 async function signup (req,res){
     try{
         const {firstName, lastName, email, password} = req.body;
+
+        if(!firstName){
+            return res.status(400).json({status : "failed", message : "First name is required"});
+        }
+
+        if(!lastName){
+            return res.status(400).json({status : "failed", message : "Last name is required"});
+        }
+
+        if(!email){
+            return res.status(400).json({status : "failed", message : "Email is required"});
+        }
+
+        if(!password){
+            return res.status(400).json({status : "failed", message : "Password is required"});
+        }
+
+
         if(!firstName || !lastName || !email || !password){
             return res.status(400).json({status : "failed", message : "All fields are required"});
         }
@@ -23,6 +41,7 @@ async function signup (req,res){
         }
 
         await cookieToken(user,res);
+        res.render("success")
         return res.status(200).json({status : "success", message : "Account created successfully", user});
     }catch(err){
         console.log(err);
@@ -63,6 +82,7 @@ async function login(req,res){
         await cookieToken(user,res);
         // console.log(`cookie token generated is ${cookieToken}`)
         console.log(res.cookie)
+        res.render("success")
         
         return res.status(200).json({status : "success", message : "Logged in successfully"});
     }
@@ -76,7 +96,7 @@ async function logout(req,res){
         expires : new Date(Date.now()),
         httpOnly : true
     })
-    res.status(200).json({succeess : true, message : "logout success"});
+    res.status(200).json({success : true, message : "logout success"});
 }
 
 async function sendResetPasswordEmail(req,res){
@@ -103,12 +123,14 @@ async function sendResetPasswordEmail(req,res){
 
     try{
         await emailHelper(options)
+        res.render("success");
         return res.status(200).json({status : "success", message : "Email sent successfully"});
     }catch(e){
         console.log(e);
         user.forgotPasswordToken = undefined;
         user.forgotPasswordExpire = undefined;
         await user.save({validateBeforeSave : false});
+        res.render("success");
         return res.status(400).json({status : "failed", message : "Something went wrong while sending email"});
     }
 
@@ -137,7 +159,6 @@ async function resetPassword(req,res){
     await user.save();
     
     cookieToken(user,res);
-
     return res.status(400).json({status : "success", message : "Password reset successfully, you can go ahead"});
     
 }
