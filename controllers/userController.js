@@ -42,7 +42,7 @@ async function signup (req,res){
                 console.log("User already verified");
             }                
             console.log(`Deleted user data for email: ${req.body.email}`);
-        }, 3 * 60 * 1000); // 3 minutes
+        }, 5 * 60 * 1000); // 5 minutes
 
         try{
             await emailHelper(options)

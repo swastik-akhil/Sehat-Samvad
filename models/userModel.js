@@ -131,7 +131,7 @@ userSchema.methods.generateSignupToken = async function (){
         .createHash("sha256")
         .update(signupToken)
         .digest("hex");
-    this.signupTokenExpire = Date.now()+2*60*1000;
+    this.signupTokenExpire = Date.now()+5*60*1000;
     return signupToken;
 }
 
