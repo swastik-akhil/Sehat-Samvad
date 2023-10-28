@@ -17,17 +17,76 @@ async function signup (req,res){
         if(existingUser){
             return res.status(400).json({status : "failed", message : "user already exists"})
         }
+        
         const user = await User.create({firstName, lastName, email, password});
-        if(!user){
-            return res.status(400).json({status : "failed", message : "Something went wrong while creating your account"});
+        
+        const signupToken = await user.generateSignupToken();
+        await user.save({validateBeforeSave : false});
+
+        const myUrl = `${req.protocol}://${req.get("host")}/api/v1/user/signup/verifySignup/${signupToken}`;
+        
+        const message = `We received a request to activate your account. Click the link below to activate it:\n ${myUrl}`;
+        const options = {
+            email : user.email,
+            subject : "Account Activation",
+            message
         }
 
-        await cookieToken(user,res);
-        return res.status(200).json({status : "success", message : "Account created successfully", user});
+        setTimeout(async () => {
+            console.log(user)
+            // const user = await User.findOneAndDelete({ email: req.body.email, signupVerification: false });
+            if(!user.signupVerification){
+                user.deleteOne({user})
+            }
+            else{
+                console.log("User already verified");
+            }                
+            console.log(`Deleted user data for email: ${req.body.email}`);
+        }, 3 * 60 * 1000); // 3 minutes
+
+        try{
+            await emailHelper(options)
+            return res.status(200).json({status : "success", message : "Email sent successfully"});
+        }catch(e){
+            clearTimeout();
+            console.log(e);
+            user.signupToken = undefined;
+            user.signupTokenExpire = undefined;
+            await user.save({validateBeforeSave : false});
+
+            return res.status(400).json({status : "failed", message : "Something went wrong while sending email"});
+        }
+
+        // if(!user){
+        //     return res.status(400).json({status : "failed", message : "Something went wrong while creating your account"});
+        // }
+
+        // await cookieToken(user,res);
+        // return res.status(200).json({status : "success", message : "Account created successfully", user});
     }catch(err){
         console.log(err);
     }
 }
+
+async function signupVerification(req,res){
+    const signupToken = req.params.signupToken;
+    const encyrptedToken = crypto
+        .createHash("sha256")
+        .update(signupToken)
+        .digest("hex");
+        const user = await User.findOne({signupToken : encyrptedToken, signupTokenExpire : {$gt : Date.now()}})
+        if(!user){
+            return res.status(400).json({status : "failed", message : "Invalid token or token expired"});
+        }
+
+        user.signupVerification = true;
+        user.signupToken = undefined;
+        user.signupTokenExpire = undefined;
+        await user.save();
+        cookieToken(user,res);
+        return res.status(200).json({status : "success", message : "Account activated successfully"})
+}
+
 
 async function login(req,res){
     try {
@@ -42,7 +101,9 @@ async function login(req,res){
         if(!user){
             return res.status(400).json({status : "failed", message : "Invalid credentials"});
         }
-
+        if(!user.signupVerification){
+            return res.status(400).json({status : "failed", message : "Please verify your email"});
+        }
         const flag = await user.checkPassword(password);
         console.log(`flag: ${flag}`)
         if(!flag){
@@ -89,6 +150,10 @@ async function sendResetPasswordEmail(req,res){
     if(!user){
         return res.status(400).json({status : "failed", message : "No user found with this email"});
     }
+    
+    if(!user.signupVerification){
+        return res.status(400).json({status : "failed", message : "You are not a registered user"});
+    }
 
     const forgotToken = await user.generateForgotPasswordToken();
     await user.save({validateBeforeSave : false});
@@ -116,7 +181,7 @@ async function sendResetPasswordEmail(req,res){
 
 async function resetPassword(req,res){
     const token = req.params.token;
-    encyrptedToken = crypto
+    const encyrptedToken = crypto
         .createHash("sha256")
         .update(token)
         .digest("hex");
@@ -170,4 +235,4 @@ async function updatePassword(req,res){
 }
 
 
-module.exports = {signup, login, logout, sendResetPasswordEmail, resetPassword, updatePassword}
+module.exports = {signup, login, logout, sendResetPasswordEmail, resetPassword, updatePassword, signupVerification}
