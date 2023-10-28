@@ -6,6 +6,8 @@ Access rights are uniquely granted through cookies 🍪, providing admins with s
 
 It's a secure, user-friendly solution for hassle-free appointment scheduling, tailored for patients, doctors, and admins. 🚀
 
+Happy Coding 💻
+
 
 
 
