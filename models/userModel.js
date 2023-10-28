@@ -60,17 +60,17 @@ const userSchema = new mongoose.Schema(
                 ref : "Appointment"
             }
         ],
-        signupToken : {
-            type : String,
-        },
-        signupTokenExpire : {
-            type : Date,
-            default : Date.now()
-        },
-        signupVerification : {
-            type : Boolean,
-            default : false
-        },
+        // signupToken : {
+        //     type : String,
+        // },
+        // signupTokenExpire : {
+        //     type : Date,
+        //     default : Date.now()
+        // },
+        // signupVerification : {
+        //     type : Boolean,
+        //     default : false
+        // },
 
         createdAt: {
             type: Date,
