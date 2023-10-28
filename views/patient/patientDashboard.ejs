@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <title>Patient Dashboard</title>
+    <style>
+        body {
+            background: #e8cbc0;
+            background: -webkit-linear-gradient(to right, #e8cbc0, #636fa4);
+            background: linear-gradient(to right, #e8cbc0, #636fa4);
+            min-height: 100vh;
+        }
+
+        .social-link {
+            width: 30px;
+            height: 30px;
+            border: 1px solid #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+            border-radius: 50%;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+
+        .social-link:hover, .social-link:focus {
+            background: #ddd;
+            text-decoration: none;
+            color: #555;
+        }
+
+        /* Colors based on functionality */
+        .bg-create-appointment {
+            background: linear-gradient(to right, #ae5dd4, #7f46e9); /* Purple Gradient */
+
+            color: white;
+        }
+
+        .bg-show-appointments {
+            background: linear-gradient(to right, #ffb74d, #ffcc80); /* Light Orange Gradient */
+            color: white;
+        }
+
+        .bg-get-doctor {
+            background: linear-gradient(to right, #5dc761, #a6f150); /* Green Gradient */
+            color: white;
+        }
+
+        .bg-update-role {
+            background: linear-gradient(to right, #66ddbf, #3bd4b1); /* Light Cyan Gradient */
+            color: white;
+        }
+        .bg-reset-password {
+            background: linear-gradient(to right, #f86d6d, #f750f7);
+            color: white;
+        }
+
+        @media (min-width: 992px) {
+            .col-lg-3 {
+                flex: 0 0 20%;
+                max-width: 20%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container py-5">
+        <div class="row text-center text-white">
+            <div class="col-lg-8 mx-auto">
+                <h1 class="display-4">Patient Dashboard</h1>
+                <p class="lead mb-0">The Patient Dashboard serves as a centralized hub empowering individuals to seamlessly manage their healthcare journey. With a user-friendly interface, patients can efficiently create and track appointments, access essential information about their scheduled appointments, and connect with healthcare providers. The dashboard facilitates a streamlined and interactive experience, empowering patients to take an active role in their health management. It's a one-stop destination for appointment scheduling, tracking, and communication, enhancing the overall healthcare experience for patients.</p>
+            </div>
+        </div>
+    </div><!-- End -->
+
+    <div class="container">
+        <div class="row text-center">
+
+            <!-- Doctor card: Create Appointment -->
+            <div class="col-lg-3 mb-4">
+                <div class="bg-create-appointment rounded shadow-sm py-5 px-4">
+                    <img src="https://cdn-icons-png.flaticon.com/512/3022/3022343.png" alt="" width="100" class="img-fluid rounded-circle mb-3 img-thumbnail shadow-sm">
+                    <br> <hr>
+                    <a href="/static/patientDashboard/createAppointment"><button type="button" class="btn btn-primary">Create Appointment</button></a>
+                </div>
+            </div><!-- End -->
+
+            <!-- Doctor card: Show Appointments -->
+            <div class="col-lg-3 mb-4">
+                <div class="bg-show-appointments rounded shadow-sm py-5 px-4">
+                    <img src="https://cdn-icons-png.flaticon.com/512/1572/1572562.png" alt="" width="100" class="img-fluid rounded-circle mb-3 img-thumbnail shadow-sm">
+                    <br> <hr>
+                    <a href="/api/v1/showAppointments"><button type="button" class="btn btn-warning">Show Appointments</button></a>
+                </div>
+            </div><!-- End -->
+
+            <!-- Doctor card: Get Doctor -->
+            <div class="col-lg-3 mb-4">
+                <div class="bg-get-doctor rounded shadow-sm py-5 px-4">
+                    <img src="https://cdn-icons-png.flaticon.com/512/4405/4405919.png" alt="" width="100" class="img-fluid rounded-circle mb-3 img-thumbnail shadow-sm">
+                    <br> <br><hr> 
+                    <a href="/api/v1/getDoctor"><button type="button" class="btn btn-success">Get Doctor</button></a>
+                </div>
+            </div><!-- End -->
+
+            <!-- Doctor card: Update Role -->
+            <div class="col-lg-3 mb-4">
+                <div class="bg-update-role rounded shadow-sm py-5 px-4">
+                    <img src="https://cdn-icons-png.flaticon.com/512/6551/6551860.png" alt="" width="100" class="img-fluid rounded-circle mb-3 img-thumbnail shadow-sm">
+                    <br> <br><hr>
+                    <a href=""><button type="button" class="btn btn-info">Update Role</button></a>
+                </div>
+            </div><!-- End -->
+            <div class="col-lg-3 mb-4">
+                <div class="bg-reset-password rounded shadow-sm py-5 px-4">
+                    <img src="https://cdn-icons-png.flaticon.com/512/3408/3408455.png" alt="" width="100" class="img-fluid rounded-circle mb-3 img-thumbnail shadow-sm">
+                    <br> <br><hr>
+                    <a href=""><button type="button" class="btn btn-secondary">Reset Password</button></a>
+                </div>
+            </div><!-- End -->
+        </div>
+    </div>
+</body>
+</html>

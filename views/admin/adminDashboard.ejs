@@ -5,13 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
 
-    <title>Document</title>
+    <title>Admin Panel</title>
     <style>
         body {
-            background: #e8cbc0;
-            background: -webkit-linear-gradient(to right, #e8cbc0, #636fa4);
-            background: linear-gradient(to right, #e8cbc0, #636fa4);
-            min-height: 100vh;
+            background: #3494E6;  /* fallback for old browsers */
+background: -webkit-linear-gradient(to right, #EC6EAD, #3494E6);  /* Chrome 10-25, Safari 5.1-6 */
+background: linear-gradient(to right, #EC6EAD, #3494E6); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+
+
         }
 
         .social-link {
@@ -40,12 +42,18 @@
         }
 
         .bg-delete {
-            background: linear-gradient(to right, #d9534f, #e99e97); /* Light Red Gradient */
+            background: linear-gradient(to right, #ec6f66, #f3a183); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
             color: white;
         }
 
         .bg-sort {
-            background: linear-gradient(to right, #5bc0de, #a6d8e8); /* Light Blue Gradient */
+            background: linear-gradient(to right, #7171c0, #2ca7ff); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+            color: white;
+        }
+
+        .bg-reset-password {
+            background: linear-gradient(to right, #f86d6d, #f750f7);
             color: white;
         }
     </style>
@@ -55,7 +63,7 @@
         <div class="row text-center text-white">
             <div class="col-lg-8 mx-auto">
                 <h1 class="display-4">Admin Panel</h1>
-                <p class="lead mb-0">Centralized command hub for streamlined control, efficient resource management, and insightful data oversight, facilitating seamless operations and collaboration.</p>
+                <p class="lead mb-0">Welcome to the Admin Dashboard, the indispensable nerve center of healthcare administration that serves as the linchpin for orchestrating and optimizing every facet of the intricate healthcare ecosystem. As the primary gateway to the administrative realm, this dashboard empowers you with a sophisticated control panel, providing an all-encompassing view and control over the multifaceted operations within the healthcare domain.</p>
             </div>
         </div>
     </div><!-- End -->
@@ -64,7 +72,7 @@
         <div class="row text-center">
 
             <!-- Team item -->
-            <div class="col-lg-4 mb-4">
+            <div class="col-lg-3 mb-4">
                 <div class="bg-admin rounded shadow-sm py-5 px-4">
                     <img src="https://cdn-icons-png.flaticon.com/512/4305/4305692.png" alt="" width="100" class="img-fluid rounded-circle mb-3 img-thumbnail shadow-sm">
                     <br> <hr>
@@ -73,7 +81,7 @@
             </div><!-- End -->
 
             <!-- Team item -->
-            <div class="col-lg-4 mb-4">
+            <div class="col-lg-3 mb-4">
                 <div class="bg-delete rounded shadow-sm py-5 px-4">
                     <img src="https://cdn-icons-png.flaticon.com/512/2444/2444466.png" alt="" width="100" class="img-fluid rounded-circle mb-3 img-thumbnail shadow-sm">
                     <br> <hr>
@@ -82,15 +90,23 @@
             </div><!-- End -->
 
             <!-- Team item -->
-            <div class="col-lg-4 mb-4">
+            <div class="col-lg-3 mb-4">
                 <div class="bg-sort rounded shadow-sm py-5 px-4">
                     <img src="https://cdn-icons-png.flaticon.com/512/1707/1707647.png" alt="" width="100" class="img-fluid rounded-circle mb-3 img-thumbnail shadow-sm">
                     <br> <hr>
                     <a href="/api/v1/admin/sortUsers"><button type="button" class="btn btn-primary">Sort Users</button></a>
                 </div>
             </div><!-- End -->
+
+            <!-- Team item -->
+            <div class="col-lg-3 mb-4">
+                <div class="bg-reset-password rounded shadow-sm py-5 px-4">
+                    <img src="https://cdn-icons-png.flaticon.com/512/3408/3408455.png" alt="" width="100" class="img-fluid rounded-circle mb-3 img-thumbnail shadow-sm">
+                    <br> <hr>
+                    <a href="/reset-password"><button type="button" class="btn btn-secondary">Reset Password</button></a>
+                </div>
+            </div><!-- End -->
         </div>
     </div>
-
 </body>
 </html>

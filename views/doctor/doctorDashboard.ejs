@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <title>Doctor Dashboard</title>
+    <style>
+        body {
+            background: #dd3e54;  /* fallback for old browsers */
+background: -webkit-linear-gradient(to right, #6be585, #dd3e54);  /* Chrome 10-25, Safari 5.1-6 */
+background: linear-gradient(to right, #6be585, #dd3e54); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+        }
+
+        .social-link {
+            width: 30px;
+            height: 30px;
+            border: 1px solid #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+            border-radius: 50%;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+
+        .social-link:hover, .social-link:focus {
+            background: #ddd;
+            text-decoration: none;
+            color: #555;
+        }
+
+        .bg-add-specialisation,
+        .bg-mark-appointment,
+        .bg-reset-password {
+            min-height: 300px; /* Set a minimum height to ensure equal spacing */
+        }
+
+        .bg-add-specialisation {
+            background: linear-gradient(to right, #e65c00, #f7d52e); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+            color: white;
+        }
+
+        .bg-mark-appointment {
+            background: linear-gradient(to right, #a04aeb, #4c00ff); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+            color: white;
+        }
+
+        .bg-reset-password {
+            background: linear-gradient(to right, #f86d6d, #f750f7);
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container py-5">
+        <div class="row text-center text-white">
+            <div class="col-lg-8 mx-auto">
+                <h1 class="display-4">Doctor Dashboard</h1>
+                <p class="lead mb-0">Step into the world of the Doctor Dashboard, a dedicated and sophisticated command center meticulously crafted to elevate your experience in healthcare management. This intuitive platform is thoughtfully designed to not only streamline but revolutionize your roles and responsibilities as a healthcare professional.
+
+                    Navigate effortlessly through the array of features that empower you to expand your expertise by adding specializations seamlessly. The dashboard's functionality extends beyond the conventional, allowing you to mark appointments as complete with a simple click, ensuring a smooth and organized approach to patient care. Experience the convenience of resetting passwords with ease, prioritizing security and accessibility in your daily tasks.</p>
+            </div>
+        </div>
+    </div><!-- End -->
+
+    <div class="container">
+        <div class="row text-center">
+
+            <!-- Doctor card: Add Specialisation -->
+            <div class="col-lg-4 mb-4">
+                <div class="bg-add-specialisation rounded shadow-sm py-5 px-4">
+                    <img src="https://cdn-icons-png.flaticon.com/128/1671/1671062.png" alt="" width="100" class="img-fluid rounded-circle mb-3 img-thumbnail shadow-sm">
+                    <br> <hr>
+                    <a href=""><button type="button" class="btn btn-warning">Add Specialisation</button></a>
+                </div>
+            </div><!-- End -->
+
+            <!-- Doctor card: Mark Appointment Complete -->
+            <div class="col-lg-4 mb-4">
+                <div class="bg-mark-appointment rounded shadow-sm py-5 px-4">
+                    <img src="https://cdn-icons-png.flaticon.com/512/7322/7322272.png" alt="" width="100" class="img-fluid rounded-circle mb-3 img-thumbnail shadow-sm">
+                    <br> <hr>
+                    <a href=""><button type="button" class="btn btn-primary">Mark Appointment Complete</button></a>
+                </div>
+            </div><!-- End -->
+
+            <!-- Doctor card: Reset Password -->
+            <div class="col-lg-4 mb-4">
+                <div class="bg-reset-password rounded shadow-sm py-5 px-4">
+                    <img src="https://cdn-icons-png.flaticon.com/512/3408/3408455.png" alt="" width="100" class="img-fluid rounded-circle mb-3 img-thumbnail shadow-sm">
+                    <br> <hr>
+                    <a href="/reset-password"><button type="button" class="btn btn-secondary">Reset Password</button></a>
+                </div>
+            </div><!-- End -->
+        </div>
+
+    </div>
+</body>
+</html>

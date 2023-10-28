@@ -6,7 +6,7 @@ async function createAppointment(req,res){
     const {doctorId} = req.query;
     if(!doctorId){
         return res.status(400).json({status : "error", message : "doctorId is required"});
-    }
+    }   
 
     // const patientId = req.user._id;
     const {date, description, amount} = req.body;
@@ -15,6 +15,9 @@ async function createAppointment(req,res){
         return res.status(400).json({status : "error", message : "date, description and amount are required"});
     }
 
+    if(date<Date.now()){
+        return res.status(400).json({status : "error", message : "date must be a future date"});
+    }
     const user = await User.findById(req.user._id);
     const doctor = await User.findById(doctorId);
     if(!doctor){
@@ -55,7 +58,9 @@ async function showAppointments(req,res){
     try{
         const user = req.user;
         const appointments = await Appointment.find({patientId: user._id});
-        return res.status(200).json({status: "success", appointments});
+        return res.render('patient/appointments')
+        // return res.render('patient/appointments', {appointments});
+        // return res.status(200).json({status: "success", appointments});
     }catch (e) {
         console.log(e)
     }

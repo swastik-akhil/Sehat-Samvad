@@ -35,7 +35,7 @@ app.use("/api/v1/user", userRouter);
 app.use("/api/v1/patient", patientRouter);
 app.use("/api/v1/admin", adminRouter);
 app.use("/api/v1/doctor", doctorRouter);
-app.use("/api/v1/static", staticRouter);
+app.use("/static", staticRouter);
 
 
 

@@ -31,9 +31,28 @@ async function signup (req,res){
             return res.status(400).json({status : "failed", message : "Password must be atleast 6 characters long"});
         }
 
-        const existingUser = await User.findOne({email});
+        const existingUser = await User.findOne({email}).select("+password");
         if(existingUser){
-            return res.status(400).json({status : "failed", message : "user already exists"})
+            // const password = existingUser.password;
+            // const flag =existingUser.checkPassword(password);
+            // if(flag){
+            //     await cookieToken(existingUser,res);
+            //     existingUser.password = undefined;
+            //     if(existingUser.role === "doctor"){
+            //         return res.render("doctor/doctorDashboard")
+            //     }
+            //     else if(existingUser.role === "admin"){
+            //         return res.render("admin/adminDashboard")
+            //     }
+            //     else{
+            //         return res.render("patient/patientDashboard")
+            //     }
+            //     // return res.render("patient/patientDashboard")
+            // }
+            // else{
+            //     res.render("/user/login")
+            // }
+            return res.render("user/login")
         }
         const user = await User.create({firstName, lastName, email, password});
         if(!user){
@@ -41,9 +60,20 @@ async function signup (req,res){
         }
 
         await cookieToken(user,res);
-        res.render("success")
-        return res.status(200).json({status : "success", message : "Account created successfully", user});
+        // if(user.role === "doctor"){
+        //     return res.render("doctor/doctorDashboard")
+        // }
+        // else if(user.role === "admin"){
+        //     return res.render("admin/adminDashboard")
+        // }
+        // else{
+        //     return res.render("patient/patientDashboard")
+        // }
+
+        return res.render("patient/patientDashboard")
+        // return res.status(200).json({status : "success", message : "Account created successfully", user});
     }catch(err){
+        res.redirect("/")
         console.log(err);
     }
 }
@@ -53,7 +83,8 @@ async function login(req,res){
         const {email, password} = req.body;
     
         if(!email || !password){
-            return res.status(400).json({status : "failed", message : "All fields are required"});
+            return res.render("user/login");
+            // return res.status(400).json({status : "failed", message : "All fields are required"});
         }
 
         const user = await User.findOne({email}).select("+password")
@@ -65,7 +96,9 @@ async function login(req,res){
         const flag = await user.checkPassword(password);
         console.log(`flag: ${flag}`)
         if(!flag){
-            return res.status(400).json({status : "failed", message : "Email or password does not match"});
+            // alert("Email or password does not match");
+            return res.render("user/login");
+            // res.render("user/login", { errorMessage: "Email or password does not match" });
         }
         
         // const cookieToken =  (user,res)=>{
@@ -82,9 +115,18 @@ async function login(req,res){
         await cookieToken(user,res);
         // console.log(`cookie token generated is ${cookieToken}`)
         console.log(res.cookie)
-        res.render("success")
+        if(user.role === "doctor"){
+            return res.render("doctor/doctorDashboard")
+        }
+        else if(user.role === "admin"){
+            return res.render("admin/adminDashboard")
+        }
+        else{
+            return res.render("patient/patientDashboard")
+        }
+        // res.render("success")
         
-        return res.status(200).json({status : "success", message : "Logged in successfully"});
+        // return res.status(200).json({status : "success", message : "Logged in successfully"});
     }
     catch(err){
         console.log(err);

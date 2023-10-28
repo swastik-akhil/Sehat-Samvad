@@ -8,7 +8,7 @@ async function staticSignup (req,res){
             let url = {url:req.protocol + '://' + req.get('host') + req.originalUrl}
             url = JSON.stringify(url)
             url = url.replace("/api/v1/static/signup", "" )
-            return res.render("signup", {url});
+            return res.render("user/signup", {url});
             // return res.status(400).json({status : "failed", message : "Something went wrong while creating your account"});
         }
 
@@ -19,7 +19,7 @@ async function staticSignup (req,res){
 }
 async function staticLogin (req,res){
     try{
-            return res.render("login");
+            return res.render("user/login");
             // return res.status(400).json({status : "failed", message : "Something went wrong while creating your account"});
         }
 
@@ -57,6 +57,10 @@ async function staticAdminDashboard (req,res){
     return res.render("adminDashboard");
 }
 
+
+async function staticCreateAppointment (req,res){
+    return res.render("patient/createAppointment")
+}
 
 
 
@@ -223,4 +227,11 @@ async function staticAdminDashboard (req,res){
 // }
 
 
-module.exports = {staticSignup, staticLogin, staticForgotPasswordSendEmail, staticUpdatePassword, staticAdminDashboard};
+module.exports = {
+    staticSignup,
+     staticLogin,
+      staticForgotPasswordSendEmail,
+       staticUpdatePassword,
+        staticAdminDashboard,
+         staticCreateAppointment
+        };
