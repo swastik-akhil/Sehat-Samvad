@@ -60,6 +60,18 @@ const userSchema = new mongoose.Schema(
                 ref : "Appointment"
             }
         ],
+        signupToken : {
+            type : String,
+        },
+        signupTokenExpire : {
+            type : Date,
+            default : Date.now()
+        },
+        signupVerification : {
+            type : Boolean,
+            default : false
+        },
+
         createdAt: {
             type: Date,
             default: Date.now(),
@@ -112,5 +124,15 @@ userSchema.methods.generateForgotPasswordToken = async function () {
     this.forgotPasswordExpire = Date.now()+15*60*1000;
     return resetToken;
 };
+
+userSchema.methods.generateSingupToken = async function (){
+    const signupToken = crypto.randomBytes(20).toString("hex");
+    this.signupToken = crypto
+        .createHash("sha256")
+        .update(signupToken)
+        .digest("hex");
+    this.signupTokenExpire = Date.now()+2*60*1000;
+    return signupToken;
+}
 
 module.exports = mongoose.model("User", userSchema);
