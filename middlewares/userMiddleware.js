@@ -8,7 +8,7 @@ async function isLoggedIn(req, res, next){
         if(!token) return res.status(401).json({errorMessage : "Unauthorized, no token found"});
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
         req.user = await User.findById(decoded.id);
-        if(!user.signupVerification){
+        if(!req.user.signupVerification){
             return res.status(401).json({errorMessage : "Unauthorized, please verify your email"});
         }
         // if(!user) return res.status(401).json({errorMessage : "Unauthorized, no user found"});
