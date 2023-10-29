@@ -41,7 +41,7 @@ async function signup (req,res){
             // else{
             //     console.log("User already verified");
             // }                
-        }, 1 * 60 * 1000); // 1 minutes
+        }, 5 * 60 * 1000); // 5 minutes
 
         try{
             await emailHelper(options)
