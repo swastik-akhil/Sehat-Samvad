@@ -21,6 +21,10 @@ Happy coding! 💻
 
 [@swastik-akhil](https://github.com/swastik-akhil)
 
+## Deployed Link
+
+The live version of this application is available [here](https://sehat-samvad.onrender.com).
+
 ## Documentation
 
 Explore detailed documentation [here](https://documenter.getpostman.com/view/29198187/2s9YRDzAVn).
