@@ -1,4 +1,5 @@
-# Sehat-Samvad 🩹
+# Sehat-Samvad 🩹 
+## To see frontend part also (currently in development) switch to frontend-integration branch
 
 Step into the universe of Sehat-Samvad, where our **appointment scheduler** goes beyond being an app—it's a savvy solution! 🚀 Crafted with the power of *Node.js*, *Express*, and *MongoDB*, it's your health companion in the digital world.
 
