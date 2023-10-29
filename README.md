@@ -1,6 +1,6 @@
 # Sehat Samvad 🩹
 
-#Change your branch to dev to see more features
+# Change your branch to dev to see more features
 
 Introducing a sleek **appointment scheduler** crafted with *Node.js*, *Express*, and *MongoDB*. This user-friendly app prioritizes security 🔒, employing advanced password protection for patients, doctors, and administrators. It ensures a seamless experience by sending helpful email reminders 📧 for password resets and new appointments 📅.
 
