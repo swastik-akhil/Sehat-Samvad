@@ -33,16 +33,15 @@ async function signup (req,res){
         }
 
         setTimeout(async () => {
-            console.log(user)
-            // const user = await User.findOneAndDelete({ email: req.body.email, signupVerification: false });
-            if(!user.signupVerification){
-                user.deleteOne({user})
-            }
-            else{
-                console.log("User already verified");
-            }                
-            console.log(`Deleted user data for email: ${req.body.email}`);
-        }, 5 * 60 * 1000); // 5 minutes
+            await User.findOneAndDelete({signupVerification: false });
+
+            // if(!user.signupVerification){
+            //     user.deleteOne({user})
+            // }
+            // else{
+            //     console.log("User already verified");
+            // }                
+        }, 1 * 60 * 1000); // 1 minutes
 
         try{
             await emailHelper(options)
@@ -122,7 +121,8 @@ async function login(req,res){
         // }
 
         await cookieToken(user,res);
-        // console.log(`cookie token generated is ${cookieToken}`)
+        console.log("msg from user controller below")
+        console.log(`cookie token generated is ${cookieToken}`)
         console.log(res.cookie)
         
         return res.status(200).json({status : "success", message : "Logged in successfully"});

@@ -10,6 +10,8 @@ const cookieToken = async (user,res,next)=>{
         // console.log("token", token);
         // console.log(`cookie token generated is ${token}`)
         user.password = undefined;
+        console.log("cookieToken", token);
+        console.log("cookieToken sent");
         return res.cookie("token", token, options);
 
         // next()
