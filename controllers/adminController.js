@@ -70,3 +70,4 @@ async function adminSortUsers(req,res){
 
 
 module.exports = {updateAdminRole, adminGetAllUsers, adminDeleteDoctor, adminSortUsers}
+//

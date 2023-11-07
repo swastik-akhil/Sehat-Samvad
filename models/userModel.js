@@ -136,3 +136,4 @@ userSchema.methods.generateSignupToken = async function (){
 }
 
 module.exports = mongoose.model("User", userSchema);
+//

@@ -9,3 +9,4 @@ router.route("/getAllUsers").get(isLoggedIn, isAdmin, adminGetAllUsers)
 router.route("/deleteDoctor").delete(isLoggedIn, isAdmin, adminDeleteDoctor);
 router.route("/sortUsers").get(isLoggedIn, isAdmin, adminSortUsers)
 module.exports = router;
+//

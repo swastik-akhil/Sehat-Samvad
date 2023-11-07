@@ -40,3 +40,4 @@ app.use("/api/v1/doctor", doctorRouter);
 app.listen(PORT, ()=>{
     console.log(`Server is running on port ${PORT}`);
 })
+//

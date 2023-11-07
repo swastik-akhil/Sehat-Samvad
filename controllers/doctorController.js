@@ -63,3 +63,4 @@ async function doctorMarkAppointmentComplete(req,res){
 }
 
 module.exports = {updateDoctorRole, doctorAddSpecialisation, doctorMarkAppointmentComplete}
+//

@@ -236,3 +236,4 @@ async function updatePassword(req,res){
 
 
 module.exports = {signup, login, logout, sendResetPasswordEmail, resetPassword, updatePassword, signupVerification}
+//

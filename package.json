@@ -22,7 +22,7 @@
     "nodemailer": "^6.9.7",
     "validator": "^13.11.0"
   },
-  "devDependencies": {
+  "devDependencies":  {
     "nodemon": "^3.0.1"
   }
 }
