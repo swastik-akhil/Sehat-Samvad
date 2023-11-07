@@ -1,6 +1,7 @@
 const User = require('../models/userModel');
 const cookieToken = require('../utils/cookieToken');
-const emailHelper = require('../utils/emailHelper');
+const {mailHelper} = require('../utils/emailHelper');
+const axios = require('axios');
 require("dotenv").config();
 const crypto = require("crypto");
 async function signup (req,res){
@@ -34,7 +35,7 @@ async function signup (req,res){
 
         setTimeout(async () => {
             await User.findOneAndDelete({signupVerification: false });
-
+            console.log("User deleted");
             // if(!user.signupVerification){
             //     user.deleteOne({user})
             // }
@@ -44,7 +45,7 @@ async function signup (req,res){
         }, 5 * 60 * 1000); // 5 minutes
 
         try{
-            await emailHelper(options)
+            mailHelper(options)
             return res.status(200).json({status : "success", message : "Email sent successfully"});
         }catch(e){
             clearTimeout();
@@ -52,11 +53,11 @@ async function signup (req,res){
             user.signupToken = undefined;
             user.signupTokenExpire = undefined;
             await user.save({validateBeforeSave : false});
-
             return res.status(400).json({status : "failed", message : "Something went wrong while sending email"});
         }
-
+        
         // if(!user){
+            // await cookieToken(user,res);
         //     return res.status(400).json({status : "failed", message : "Something went wrong while creating your account"});
         // }
 
@@ -82,7 +83,7 @@ async function signupVerification(req,res){
         user.signupToken = undefined;
         user.signupTokenExpire = undefined;
         await user.save();
-        cookieToken(user,res);
+        await cookieToken(user,res);
         return res.status(200).json({status : "success", message : "Account activated successfully"})
 }
 
@@ -167,7 +168,7 @@ async function sendResetPasswordEmail(req,res){
     }
 
     try{
-        await emailHelper(options)
+        mailHelper(options)
         return res.status(200).json({status : "success", message : "Email sent successfully"});
     }catch(e){
         console.log(e);
@@ -231,6 +232,39 @@ async function updatePassword(req,res){
 
     user.password = newPassword;
     await user.save();
+
+    const clientIP = req.ip; // Assuming you're using Express, this gets the client's IP address
+    const geoLocationApiUrl = `https://ipinfo.io/${clientIP}/json`;
+    
+    try{    
+        const response = await axios.get(geoLocationApiUrl);
+
+        console.log('Geolocation API Response:', response.data);
+
+        if (response.status === 200 && response.data && response.data.city && response.data.region && response.data.country) {
+            const locationInfo = `${response.data.city}, ${response.data.region}, ${response.data.country}`;
+            message = `Your password has been updated at ${new Date()} from ${locationInfo}. If it's not you, please contact support.`;
+        } else {
+            message = `Your password has been updated at ${new Date()}. If it's not you, please contact support.`;
+        }
+        const options = {
+            email : user.email,
+            subject : "Password Updated",
+            message : message
+        }
+        try {
+            mailHelper(options);
+        } catch (error) {
+            console.log("error while sending mail", error);
+        }
+
+    }catch(e){
+        console.log("error while fetching location");
+        console.log(e);
+    }
+
+
+
     return res.status(200).json({status : "success", message : "Password updated successfully"});
 }
 

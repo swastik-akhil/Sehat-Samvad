@@ -1,7 +1,8 @@
 const User = require('../models/userModel');
 const Appointment = require('../models/appointmentModel');
-const {isLoggedin} = require('../middlewares/userMiddleware');
-const emailHelper = require("../utils/emailHelper")
+// const {isLoggedin} = require('../middlewares/userMiddleware');
+const {mailHelper} = require("../utils/emailHelper")
+
 async function createAppointment(req,res){
 
     const {doctorId} = req.query;
@@ -10,6 +11,11 @@ async function createAppointment(req,res){
     }
 
     const patientId = req.user._id;
+
+    if(patientId === doctorId){
+        return res.status(400).json({status : "error", message : "You cannot schedule appointment with yourself"});
+    }
+
     const {date, description, amount} = req.body;
 
     if(!date || !description || !amount){
@@ -43,7 +49,7 @@ async function createAppointment(req,res){
     }
 
     try{
-        await emailHelper(options)
+        mailHelper(options)
         return res.status(200).json({status : "success", message : "Email sent successfully"});
     }catch(e){
         console.log(e);
@@ -56,6 +62,11 @@ async function showAppointments(req,res){
     try{
         const user = req.user;
         const appointments = await Appointment.find({patientId: user._id});
+
+        if(appointments.length === 0){
+            return res.status(400).json({status: "error", message: "No appointments scheduled"});
+        }
+
         return res.status(200).json({status: "success", appointments});
     }catch (e) {
         console.log(e)
@@ -66,12 +77,19 @@ async function getDoctor(req,res){
     try{
         const {specialisation} = req.query;
         if ( !specialisation) {
-            return res.status(400).json({status: "error", message: "doctorId is required"});
+            const doctors = await User.find({role: "doctor"});
+            if ( !doctors) {
+                return res.status(400).json({status: "error", message: "doctors are not available"});
+            }
+            return res.status(200).json({status: "success, list of all doctors", doctors});
         }
+
         const doctors = await User.find({specialisation});
+        
         if ( !doctors) {
             return res.status(400).json({status: "error", message: "doctors not found"});
         }
+
         return res.status(200).json({status: "success", doctors});
     }catch (e) {
         console.log(e)

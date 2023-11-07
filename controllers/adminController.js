@@ -13,15 +13,15 @@ async function adminGetAllUsers(req,res){
 
 async function updateAdminRole(req,res){
     try{
-        const {email, password, adminKey} = req.body;
-        if(!email || !password || !adminKey){
+        const {password, adminKey} = req.body;
+        if(!password || !adminKey){
             return res.status(400).json({status : "failed", message : "All fields are required"});
         }
         if(adminKey !== process.env.ADMIN_KEY){
             return res.status(400).json({status : "failed", message : "Invalid admin key"});
         }
 
-        const user = await User.findOne({email}).select("+password")
+        const user = await User.findOne({email : req.user.email}).select("+password")
         console.log(user); //TODO:
         const flag = await user.checkPassword(password);
         console.log(`flag: ${flag}`)
