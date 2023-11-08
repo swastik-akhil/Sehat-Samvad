@@ -60,4 +60,4 @@ async function mailHelper(options){
 
 }
 
-module.exports = mailHelper
+module.exports = {mailHelper}
