@@ -50,9 +50,10 @@ async function signup (req,res){
         }catch(e){
             clearTimeout();
             console.log(e);
-            user.signupToken = undefined;
-            user.signupTokenExpire = undefined;
-            await user.save({validateBeforeSave : false});
+            // user.signupToken = undefined;
+            // user.signupTokenExpire = undefined;
+            await User.deleteOne({user});
+            // await user.save({validateBeforeSave : false});
             return res.status(400).json({status : "failed", message : "Something went wrong while sending email"});
         }
         
